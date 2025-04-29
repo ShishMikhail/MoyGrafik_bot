@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 class MoyGrafikAPI:
     def __init__(self, data_directory):
         # Инициализация токена и базовых URL для API
-        self.token = 'Bearer ODczNmU3ODQwM2E4MjJlMmIwN2RjZmViMmI3NDA0ZGIyNmNkYTQ0OTgyOThmZGUyMjA5ODRiNGEzYjRhMWVlMw'
+        self.token = 'Bearer NzExZjcxMzA4MzM4MzQ2NmViMWZjZDk3OWJmMjQwNGU0ODBlN2MxM2JlNTdhNjdjZTRlMTk0YWZmOGQyYjdhMg'
         self.base_url = 'https://api.moygrafik.ru/api/external/v1'
         self.headers = {'Authorization': self.token}
 

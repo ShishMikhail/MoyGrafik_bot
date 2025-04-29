@@ -157,11 +157,15 @@ def clear_and_replace_table(connection, table_name: str, temp_table_name: str):
 
             # Добавляем новых сотрудников в user_settings (если их telegram_id ещё нет)
             connection.execute(text("""
-                INSERT INTO user_settings (telegram_id, employee_id, subscribed, notification_times)
+                INSERT INTO user_settings (
+                    telegram_id, employee_id, subscribed, 
+                    arrival_notification_times, departure_notification_times
+                )
                 SELECT DISTINCT
                     t.telegram_id::BIGINT,
                     t.id::BIGINT,
                     TRUE,
+                    '[]',
                     '[]'
                 FROM {temp_table_name} t
                 WHERE t.telegram_id IS NOT NULL
@@ -288,7 +292,7 @@ def process_table(file_path: str, table_name: str):
         raise
 
 # Путь к вашим CSV-файлам
-data_path = "/Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database"
+data_path = "C:/Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database"
 
 # Информация о таблицах
 tables_info = [

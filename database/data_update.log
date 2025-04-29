@@ -461,3 +461,195 @@ DETAIL:  Key (id)=(104102) is still referenced from table "user_settings".
 2025-04-24 10:46:18,039 - INFO - Новые данные вставлены в таблицу presence_report
 2025-04-24 10:46:18,041 - INFO - Временная таблица presence_report_temp удалена
 2025-04-24 10:46:18,061 - INFO - Обработка таблицы presence_report завершена
+2025-04-25 09:15:54,161 - INFO - Начало обработки таблицы placements
+2025-04-25 09:15:54,184 - INFO - Загружен CSV-файл: /Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database/placements.csv, записей: 58
+2025-04-25 09:15:54,406 - INFO - Данные загружены во временную таблицу placements_temp, записей: 58
+2025-04-25 09:15:54,471 - INFO - Таблица placements полностью очищена
+2025-04-25 09:15:54,474 - INFO - Новые данные вставлены в таблицу placements
+2025-04-25 09:15:54,513 - INFO - Временная таблица placements_temp удалена
+2025-04-25 09:15:54,546 - INFO - Обработка таблицы placements завершена
+2025-04-25 09:15:54,546 - INFO - Начало обработки таблицы positions
+2025-04-25 09:15:54,548 - INFO - Загружен CSV-файл: /Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database/positions.csv, записей: 264
+2025-04-25 09:15:54,577 - INFO - Данные загружены во временную таблицу positions_temp, записей: 264
+2025-04-25 09:15:54,583 - INFO - Таблица positions полностью очищена
+2025-04-25 09:15:54,592 - INFO - Новые данные вставлены в таблицу positions
+2025-04-25 09:15:54,593 - INFO - Временная таблица positions_temp удалена
+2025-04-25 09:15:54,601 - INFO - Обработка таблицы positions завершена
+2025-04-25 09:15:54,601 - INFO - Начало обработки таблицы subdivisions
+2025-04-25 09:15:54,605 - INFO - Загружен CSV-файл: /Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database/subdivisions.csv, записей: 1278
+2025-04-25 09:15:54,764 - INFO - Данные загружены во временную таблицу subdivisions_temp, записей: 1278
+2025-04-25 09:15:54,813 - INFO - Таблица subdivisions полностью очищена
+2025-04-25 09:15:54,843 - INFO - Новые данные вставлены в таблицу subdivisions
+2025-04-25 09:15:54,844 - INFO - Временная таблица subdivisions_temp удалена
+2025-04-25 09:15:54,853 - INFO - Обработка таблицы subdivisions завершена
+2025-04-25 09:15:54,853 - INFO - Начало обработки таблицы employees
+2025-04-25 09:15:54,863 - INFO - Загружен CSV-файл: /Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database/employees.csv, записей: 1767
+2025-04-25 09:15:54,867 - WARNING - Найдены дубликаты в /Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database/employees.csv: 1461 записей
+2025-04-25 09:15:54,884 - WARNING - Дубликаты:
+          id   user_id  ...  identification_photos_count  preferred_photo
+1      34730   34140.0  ...                          NaN              NaN
+2      53164   52156.0  ...                          NaN              NaN
+3      87090   86026.0  ...                          NaN              NaN
+4     106550  105703.0  ...                          NaN              NaN
+5      75045   73922.0  ...                          NaN              NaN
+...      ...       ...  ...                          ...              ...
+1762  105870  105007.0  ...                          NaN              NaN
+1763  105317  104449.0  ...                          NaN              NaN
+1764   98658   97732.0  ...                          NaN              NaN
+1765  100460   99557.0  ...                          NaN              NaN
+1766   96709   95754.0  ...                          NaN              NaN
+
+[1461 rows x 21 columns]
+2025-04-25 09:15:54,885 - INFO - После удаления дубликатов осталось записей: 1015
+2025-04-25 09:15:55,546 - INFO - Данные загружены во временную таблицу employees_temp, записей: 1015
+2025-04-25 09:15:55,686 - INFO - Удалены связанные записи из таблицы presence_report
+2025-04-25 09:15:55,704 - INFO - Удалены записи из user_settings, ссылающиеся на текущие employee_id
+2025-04-25 09:15:55,705 - INFO - Удалены записи из notifications, ссылающиеся на несуществующие telegram_id
+2025-04-25 09:15:55,889 - INFO - Таблица employees полностью очищена
+2025-04-25 09:15:55,919 - INFO - Новые данные вставлены в таблицу employees
+2025-04-25 09:15:55,929 - ERROR - Ошибка при очистке и вставке данных в таблицу employees: (psycopg2.errors.UndefinedColumn) column "notification_times" of relation "user_settings" does not exist
+LINE 2: ...r_settings (telegram_id, employee_id, subscribed, notificati...
+                                                             ^
+
+[SQL: 
+                INSERT INTO user_settings (telegram_id, employee_id, subscribed, notification_times)
+                SELECT DISTINCT
+                    t.telegram_id::BIGINT,
+                    t.id::BIGINT,
+                    TRUE,
+                    '[]'
+                FROM employees_temp t
+                WHERE t.telegram_id IS NOT NULL
+                AND t.telegram_id::BIGINT NOT IN (SELECT telegram_id FROM user_settings)
+                ON CONFLICT (telegram_id) DO NOTHING;
+            ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-04-25 09:15:55,930 - ERROR - Ошибка обработки таблицы employees: (psycopg2.errors.UndefinedColumn) column "notification_times" of relation "user_settings" does not exist
+LINE 2: ...r_settings (telegram_id, employee_id, subscribed, notificati...
+                                                             ^
+
+[SQL: 
+                INSERT INTO user_settings (telegram_id, employee_id, subscribed, notification_times)
+                SELECT DISTINCT
+                    t.telegram_id::BIGINT,
+                    t.id::BIGINT,
+                    TRUE,
+                    '[]'
+                FROM employees_temp t
+                WHERE t.telegram_id IS NOT NULL
+                AND t.telegram_id::BIGINT NOT IN (SELECT telegram_id FROM user_settings)
+                ON CONFLICT (telegram_id) DO NOTHING;
+            ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-04-25 09:21:56,141 - INFO - Начало обработки таблицы placements
+2025-04-25 09:21:56,147 - INFO - Загружен CSV-файл: C:/Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database/placements.csv, записей: 58
+2025-04-25 09:21:56,248 - INFO - Данные загружены во временную таблицу placements_temp, записей: 58
+2025-04-25 09:21:56,251 - INFO - Таблица placements полностью очищена
+2025-04-25 09:21:56,252 - INFO - Новые данные вставлены в таблицу placements
+2025-04-25 09:21:56,254 - INFO - Временная таблица placements_temp удалена
+2025-04-25 09:21:56,257 - INFO - Обработка таблицы placements завершена
+2025-04-25 09:21:56,257 - INFO - Начало обработки таблицы positions
+2025-04-25 09:21:56,259 - INFO - Загружен CSV-файл: C:/Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database/positions.csv, записей: 264
+2025-04-25 09:21:56,289 - INFO - Данные загружены во временную таблицу positions_temp, записей: 264
+2025-04-25 09:21:56,292 - INFO - Таблица positions полностью очищена
+2025-04-25 09:21:56,294 - INFO - Новые данные вставлены в таблицу positions
+2025-04-25 09:21:56,295 - INFO - Временная таблица positions_temp удалена
+2025-04-25 09:21:56,298 - INFO - Обработка таблицы positions завершена
+2025-04-25 09:21:56,299 - INFO - Начало обработки таблицы subdivisions
+2025-04-25 09:21:56,303 - INFO - Загружен CSV-файл: C:/Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database/subdivisions.csv, записей: 1278
+2025-04-25 09:21:56,400 - INFO - Данные загружены во временную таблицу subdivisions_temp, записей: 1278
+2025-04-25 09:21:56,404 - INFO - Таблица subdivisions полностью очищена
+2025-04-25 09:21:56,410 - INFO - Новые данные вставлены в таблицу subdivisions
+2025-04-25 09:21:56,411 - INFO - Временная таблица subdivisions_temp удалена
+2025-04-25 09:21:56,417 - INFO - Обработка таблицы subdivisions завершена
+2025-04-25 09:21:56,417 - INFO - Начало обработки таблицы employees
+2025-04-25 09:21:56,432 - INFO - Загружен CSV-файл: C:/Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database/employees.csv, записей: 1767
+2025-04-25 09:21:56,438 - WARNING - Найдены дубликаты в C:/Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database/employees.csv: 1461 записей
+2025-04-25 09:21:56,461 - WARNING - Дубликаты:
+          id   user_id  ...  identification_photos_count  preferred_photo
+1      34730   34140.0  ...                          NaN              NaN
+2      53164   52156.0  ...                          NaN              NaN
+3      87090   86026.0  ...                          NaN              NaN
+4     106550  105703.0  ...                          NaN              NaN
+5      75045   73922.0  ...                          NaN              NaN
+...      ...       ...  ...                          ...              ...
+1762  105870  105007.0  ...                          NaN              NaN
+1763  105317  104449.0  ...                          NaN              NaN
+1764   98658   97732.0  ...                          NaN              NaN
+1765  100460   99557.0  ...                          NaN              NaN
+1766   96709   95754.0  ...                          NaN              NaN
+
+[1461 rows x 21 columns]
+2025-04-25 09:21:56,462 - INFO - После удаления дубликатов осталось записей: 1015
+2025-04-25 09:21:56,786 - INFO - Данные загружены во временную таблицу employees_temp, записей: 1015
+2025-04-25 09:21:56,793 - INFO - Удалены связанные записи из таблицы presence_report
+2025-04-25 09:21:56,801 - INFO - Удалены записи из user_settings, ссылающиеся на текущие employee_id
+2025-04-25 09:21:56,802 - INFO - Удалены записи из notifications, ссылающиеся на несуществующие telegram_id
+2025-04-25 09:21:56,833 - INFO - Таблица employees полностью очищена
+2025-04-25 09:21:56,838 - INFO - Новые данные вставлены в таблицу employees
+2025-04-25 09:21:56,884 - INFO - Добавлены новые сотрудники в user_settings
+2025-04-25 09:21:56,886 - INFO - Временная таблица employees_temp удалена
+2025-04-25 09:21:56,890 - INFO - Обработка таблицы employees завершена
+2025-04-25 09:21:56,890 - INFO - Начало обработки таблицы presence_report
+2025-04-25 09:21:56,920 - INFO - Загружен CSV-файл: C:/Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database/presence_report.csv, записей: 12901
+2025-04-25 09:21:57,594 - INFO - Данные загружены во временную таблицу presence_report_temp, записей: 12901
+2025-04-25 09:21:57,596 - INFO - Таблица presence_report полностью очищена
+2025-04-25 09:21:57,738 - INFO - Новые данные вставлены в таблицу presence_report
+2025-04-25 09:21:57,740 - INFO - Временная таблица presence_report_temp удалена
+2025-04-25 09:21:57,757 - INFO - Обработка таблицы presence_report завершена
+2025-04-29 09:19:07,377 - INFO - Начало обработки таблицы placements
+2025-04-29 09:19:07,397 - INFO - Загружен CSV-файл: C:/Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database/placements.csv, записей: 58
+2025-04-29 09:19:07,578 - INFO - Данные загружены во временную таблицу placements_temp, записей: 58
+2025-04-29 09:19:07,635 - INFO - Таблица placements полностью очищена
+2025-04-29 09:19:07,638 - INFO - Новые данные вставлены в таблицу placements
+2025-04-29 09:19:07,661 - INFO - Временная таблица placements_temp удалена
+2025-04-29 09:19:07,664 - INFO - Обработка таблицы placements завершена
+2025-04-29 09:19:07,664 - INFO - Начало обработки таблицы positions
+2025-04-29 09:19:07,666 - INFO - Загружен CSV-файл: C:/Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database/positions.csv, записей: 264
+2025-04-29 09:19:07,693 - INFO - Данные загружены во временную таблицу positions_temp, записей: 264
+2025-04-29 09:19:07,698 - INFO - Таблица positions полностью очищена
+2025-04-29 09:19:07,703 - INFO - Новые данные вставлены в таблицу positions
+2025-04-29 09:19:07,705 - INFO - Временная таблица positions_temp удалена
+2025-04-29 09:19:07,708 - INFO - Обработка таблицы positions завершена
+2025-04-29 09:19:07,708 - INFO - Начало обработки таблицы subdivisions
+2025-04-29 09:19:07,713 - INFO - Загружен CSV-файл: C:/Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database/subdivisions.csv, записей: 1278
+2025-04-29 09:19:07,789 - INFO - Данные загружены во временную таблицу subdivisions_temp, записей: 1278
+2025-04-29 09:19:07,802 - INFO - Таблица subdivisions полностью очищена
+2025-04-29 09:19:07,824 - INFO - Новые данные вставлены в таблицу subdivisions
+2025-04-29 09:19:07,825 - INFO - Временная таблица subdivisions_temp удалена
+2025-04-29 09:19:07,831 - INFO - Обработка таблицы subdivisions завершена
+2025-04-29 09:19:07,831 - INFO - Начало обработки таблицы employees
+2025-04-29 09:19:07,843 - INFO - Загружен CSV-файл: C:/Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database/employees.csv, записей: 1773
+2025-04-29 09:19:07,847 - WARNING - Найдены дубликаты в C:/Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database/employees.csv: 1465 записей
+2025-04-29 09:19:07,862 - WARNING - Дубликаты:
+          id   user_id  ...  identification_photos_count  preferred_photo
+1      34730   34140.0  ...                          NaN              NaN
+2      53164   52156.0  ...                          NaN              NaN
+3      87090   86026.0  ...                          NaN              NaN
+4     106550  105703.0  ...                          NaN              NaN
+5      75045   73922.0  ...                          NaN              NaN
+...      ...       ...  ...                          ...              ...
+1768  105870  105007.0  ...                          NaN              NaN
+1769  105317  104449.0  ...                          NaN              NaN
+1770   98658   97732.0  ...                          NaN              NaN
+1771  100460   99557.0  ...                          NaN              NaN
+1772   96709   95754.0  ...                          NaN              NaN
+
+[1465 rows x 21 columns]
+2025-04-29 09:19:07,863 - INFO - После удаления дубликатов осталось записей: 1019
+2025-04-29 09:19:08,046 - INFO - Данные загружены во временную таблицу employees_temp, записей: 1019
+2025-04-29 09:19:08,184 - INFO - Удалены связанные записи из таблицы presence_report
+2025-04-29 09:19:08,240 - INFO - Удалены записи из user_settings, ссылающиеся на текущие employee_id
+2025-04-29 09:19:08,242 - INFO - Удалены записи из notifications, ссылающиеся на несуществующие telegram_id
+2025-04-29 09:19:08,346 - INFO - Таблица employees полностью очищена
+2025-04-29 09:19:08,368 - INFO - Новые данные вставлены в таблицу employees
+2025-04-29 09:19:08,379 - INFO - Добавлены новые сотрудники в user_settings
+2025-04-29 09:19:08,381 - INFO - Временная таблица employees_temp удалена
+2025-04-29 09:19:08,393 - INFO - Обработка таблицы employees завершена
+2025-04-29 09:19:08,393 - INFO - Начало обработки таблицы presence_report
+2025-04-29 09:19:08,419 - INFO - Загружен CSV-файл: C:/Users/shish.me/PycharmProjects/MoyGrafik_bot_01/database/presence_report.csv, записей: 12173
+2025-04-29 09:19:08,898 - INFO - Данные загружены во временную таблицу presence_report_temp, записей: 12173
+2025-04-29 09:19:08,901 - INFO - Таблица presence_report полностью очищена
+2025-04-29 09:19:09,035 - INFO - Новые данные вставлены в таблицу presence_report
+2025-04-29 09:19:09,041 - INFO - Временная таблица presence_report_temp удалена
+2025-04-29 09:19:09,056 - INFO - Обработка таблицы presence_report завершена

@@ -1,2 +1,0 @@
-2025-04-24 17:13:25,375 - tzlocal - DEBUG - Looking up time zone info from registry
-2025-04-24 17:13:25,378 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
